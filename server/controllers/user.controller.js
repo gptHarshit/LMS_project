@@ -1,13 +1,14 @@
 import { response } from "express";
 import { User } from "../models/user.model.js";
-import {bcrypt} from "bcrypt.js"
+import bcrypt from "bcrypt"
 import { generateToken } from "../utils/generatetoken.js";
 
 export const register  = async (req,res) => {
 try {
+    console.log(req.body);
     const {name ,email , password} = req.body;
     if(!name || !email || !password) {
-        return response.status(404).json({
+        return res.status(404).json({
             success: false,
             message:"All field are required"
         });
@@ -39,12 +40,12 @@ catch (error) {
 }
 }
 
-export const login = async (res,req) => {
+export const login = async (req,res) => {
 
     try {
         const {email , password} = req.body;
         if(!email || !password) {
-        return response.status(404).json({
+        return res.status(404).json({
             success: false,
             message:"All field are required"
         });
