@@ -18,6 +18,7 @@ import {
   useRegisterUserMutation,
 } from "@/features/api/authApi";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [signupInput, setSignupInput] = useState({
@@ -46,6 +47,8 @@ const Login = () => {
       isSuccess: loginIsSuccess,
     },
   ] = useLoginUserMutation();
+  
+  const navigate = useNavigate();
 
   const changeInputHandler = (e, type) => {
     const { name, value } = e.target;
@@ -67,13 +70,14 @@ const Login = () => {
       toast.success(registerData.message || "Signup Successfully")
     }
     if(registerError){
-      toast.error(registerData.data.message || "Signup Failed")
+      toast.error(registerError.data.message || "Signup Failed")
     }
     if(loginIsSuccess && loginData){
       toast.success(loginData.message || "Login Successfully")
+      navigate("/");
     }
     if(loginError){
-      toast.error(loginData.data.message || "Login Failed")
+      toast.error(loginError.data.message || "Login Failed")
     }
   }, [
     loginIsLoading,
@@ -85,7 +89,7 @@ const Login = () => {
   ]);
 
   return (
-    <div className="flex items-start justify-center min-h-screen w-full py-20 bg-gray-50">
+    <div className="flex items-start justify-center min-h-screen w-full py-20 mt-10 bg-gray-50">
       <div className="flex w-full max-w-sm flex-col gap-6">
         <Tabs defaultValue="signup" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
