@@ -65,7 +65,7 @@ const CourseTable = () => {
   const navigate = useNavigate();
 
   if (isLoading) return <h1>Loading...</h1>;
-
+console.log(data)
   return (
     <div>
       <Button onClick={() => navigate(`create`)}>Create a new course</Button>
