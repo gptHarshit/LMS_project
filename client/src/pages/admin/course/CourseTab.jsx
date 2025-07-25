@@ -1,3 +1,4 @@
+import RichTextEditor from "@/components/RichTextEditor";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,10 +9,32 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React from "react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import React, { useState } from "react";
 
 const CourseTab = () => {
   const isPublished = false;
+  const [input, setInput] = useState({
+    courseTitle: "",
+    subTitle: "",
+    description: "",
+    category: "",
+    courseLevel: "",
+    coursePrice: "",
+    courseThumbnail: "",
+  });
+  const changeEventHandler = (e) => {
+    const { name, value } = e.target;
+    setInput({ ...input, [name]: value });
+  };
   return (
     <Card>
       <CardHeader className="flex flex-row justify-between">
@@ -35,6 +58,8 @@ const CourseTab = () => {
             <Input
               type="text"
               name="courseTitle"
+              value={input.courseTitle}
+              onChange={changeEventHandler}
               placeholder="Ex. Fullstack developer"
             />
           </div>
@@ -43,12 +68,73 @@ const CourseTab = () => {
             <Input
               type="text"
               name="subTitle"
+              value={input.subTitle}
+              onChange={changeEventHandler}
               placeholder="Ex. Become a Fullstack developer from zero to hero in 2 months"
             />
           </div>
           <div>
             <Label>Description</Label>
-            <RichTextEditor/>
+            <RichTextEditor input={input} setInput={setInput} />
+          </div>
+          <div className="flex items-center gap-5">
+            <div>
+              <Label>Category</Label>
+              <Select>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Select a Category" />
+                </SelectTrigger>
+                <SelectContent className="bg-white text-black">
+                  <SelectGroup>
+                    <SelectLabel>Category</SelectLabel>
+                    <SelectItem value="Next JS">Next JS</SelectItem>
+                    <SelectItem value="Data Science">Data Science</SelectItem>
+                    <SelectItem value="Frontend Development">
+                      Frontend Development
+                    </SelectItem>
+                    <SelectItem value="Fullstack Development">
+                      Fullstack Development
+                    </SelectItem>
+                    <SelectItem value="MERN Stack Development">
+                      MERN Stack Development
+                    </SelectItem>
+                    <SelectItem value="Javascript">Javascript</SelectItem>
+                    <SelectItem value="Python">Python</SelectItem>
+                    <SelectItem value="Docker">Docker</SelectItem>
+                    <SelectItem value="MongoDB">MongoDB</SelectItem>
+                    <SelectItem value="HTML">HTML</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Course Level</Label>
+              <Select>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Select a course level" />
+                </SelectTrigger>
+                <SelectContent className="bg-white text-black">
+                  <SelectGroup>
+                    <SelectLabel>Course Level</SelectLabel>
+                    <SelectItem value="Beginner">Beginner</SelectItem>
+                    <SelectItem value="Medium">Medium</SelectItem>
+                    <SelectItem value="Advance">Advance</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Price in (INR)</Label>
+              <Input
+              type="number"
+              name="coursePrice"
+              value={input.coursePrice}
+               onChange={changeEventHandler}
+               placeholder="199"
+               className="w-fit"
+              />
+         
+            </div>
           </div>
         </div>
       </CardContent>
