@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { Progress } from "@/components/ui/progress";
 import {
   useEditLectureMutation,
+  useGetLectureByIdQuery,
   useRemoveLectureMutation,
 } from "@/features/api/courseApi";
 import { useParams } from "react-router-dom";
@@ -31,6 +32,17 @@ const LectureTab = () => {
   const [btnDisable, setBtnDisable] = useState(true);
   const params = useParams();
   const { courseId, lectureId } = params;
+
+  const { data: lectureData } = useGetLectureByIdQuery(lectureId);
+  const lecture = lectureData?.lecture;
+
+  useEffect(() => {
+    if (lecture) {
+      setLectureTitle(lecture.lectureTitle);
+      setIsFree(lecture.isPreviewFree);
+      setUploadVideoInfo(lecture.videoInfo);
+    }
+  }, [lecture]);
 
   const [editLecture, { data, isLoading, error, isSuccess }] =
     useEditLectureMutation();
@@ -152,7 +164,7 @@ const LectureTab = () => {
           />
         </div>
         <div className="flex items-center space-x-2">
-          <Switch id="airplane-mode" />
+          <Switch checked={isFree} onCheckedChange={setIsFree}  id="airplane-mode" />
           <Label htmlFor="airplane-mode">Is the Vedio Free ?</Label>
         </div>
 
