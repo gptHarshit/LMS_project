@@ -1,34 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import Filter from "./Filter";
 import SearchResult from "./SearchResult";
 import { AlertCircle } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import { useGetSearchCourseQuery } from "@/features/api/courseApi";
 
 const SearchPage = () => {
-  const isLoading = false;
-  const isEmpty = false;
+    const [searchParams] = useSearchParams();
+    const query = searchParams.get("query");
+ 
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [sortByPrice,setSortByPrice] = useState("");
+
+       const {data,isLoading} = useGetSearchCourseQuery({
+        searchQuery:query,
+        categories:selectedCategories,
+        sortByPrice
+    });
+  
+    const isEmpty = !isLoading && data?.courses.length === 0;
+
+  const handleFilterChange = (categories,price) => {
+    setSelectedCategories(categories);
+    setSortByPrice(price);
+  }
   return (
-    <div className="max-w-7xl mx-auto p-4 md:p-8">
+    <div className="max-w-7xl mx-auto p-4 md:p-8 mt-5">
       <div className="my-6">
-        <h1>Result for "html"</h1>
+        <h1 className="font-bold text-xl md:text-2xl" >Result for "{query}"</h1>
         <p>
           Showing Result for{" "}
           <span className="text-blue-800 font-bold italic">
-            Frontend Development
+            {query}
           </span>
         </p>
       </div>
       <div className="flex flex-col md:flex-row gap-10 ">
-        <Filter />
+        <Filter handleFilterChange={handleFilterChange} />
         <div className="flex-1">
           {isLoading ? (
             Array.from({ length: 3 }).map((_, index) => <CourseSkeleton key={index}  />)
           ) : isEmpty ? (
             <CourseNotFound />
           ) : (
-            [1, 2, 3].map((_,index) => <SearchResult key={index} />)
+            data?.courses?.map((course) => <SearchResult key={course._id} course={course} />)
           )}
         </div>
       </div>

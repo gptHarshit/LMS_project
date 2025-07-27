@@ -95,7 +95,7 @@ const Navbar = () => {
                   <>
                     <DropdownMenuSeparator className="my-1 border-t border-gray-200 dark:border-gray-700" />
                     <DropdownMenuItem className="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer">
-                      Dashboard
+                     <Link to="/admin/dashboard" >Dashboard</Link>  
                     </DropdownMenuItem>
                   </>
                 )}
