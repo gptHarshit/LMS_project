@@ -12,7 +12,7 @@ import {
 } from "recharts";
 
 const Dashboard = () => {
-  const { data, isError, isLoading, isSuccess } = useGetPurchasedCoursesQuery();
+  const { data, isError, isLoading } = useGetPurchasedCoursesQuery();
 
   if (isLoading) {
     return <h1>Loading...</h1>;
@@ -90,3 +90,7 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+
+
+

@@ -92,7 +92,6 @@ const CourseTab = () => {
   };
 
   const updateCourseHandler = async () => {
-    console.log(input);
     const formData = new FormData();
     formData.append("courseTitle", input.courseTitle);
     formData.append("subTitle", input.subTitle);

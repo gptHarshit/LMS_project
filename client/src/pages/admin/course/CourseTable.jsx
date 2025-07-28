@@ -1,105 +1,91 @@
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { useGetCreatorCourseQuery } from "@/features/api/courseApi";
 import {
   Table,
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useGetCreatorCourseQuery } from "@/features/api/courseApi";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Edit } from "lucide-react";
-import React from "react";
-import { useNavigate } from "react-router-dom";
-
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
 
 const CourseTable = () => {
   const { data, isLoading } = useGetCreatorCourseQuery();
   const navigate = useNavigate();
 
-  if (isLoading) return <h1>Loading...</h1>;
-console.log(data)
+  if (isLoading) return <h1 className="text-center mt-10 text-xl">Loading...</h1>;
+
   return (
-    <div>
-      <Button onClick={() => navigate(`create`)}>Create a new course</Button>
-      <Table>
-        <TableCaption>A list of your recent courses.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">Price</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Title</TableHead>
-            <TableHead className="text-right">Action</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.courses.map((course) => (
-            <TableRow key={course._id}>
-              <TableCell className="font-medium">
-                {course?.coursePrice || "NA"}
-              </TableCell>
-              <TableCell>
-                <Badge>{course.isPublished ? "Published" : "Draft"}</Badge>
-              </TableCell>
-              <TableCell>{course.courseTitle}</TableCell>
-              <TableCell className="text-right">
-                <Button size="sm" variant="ghost" onClick={() => navigate(`${course._id}`)} >
-                  <Edit />
-                </Button>
-              </TableCell>
+    <div className="w-full overflow-x-auto px-4 sm:px-6 md:px-10 py-8">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-gray-800">Your Courses</h2>
+        <Button
+          onClick={() => navigate("/admin/course/create")}
+          className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 transition-all rounded-xl px-6 py-2 shadow-md"
+        >
+          + Create Course
+        </Button>
+      </div>
+
+      <div className="rounded-xl shadow-md overflow-hidden">
+        <Table>
+          <TableCaption className="text-gray-500 mt-4">
+            A list of your recent courses.
+          </TableCaption>
+          <TableHeader className="bg-gray-100">
+            <TableRow>
+              <TableHead className="text-gray-700">Price</TableHead>
+              <TableHead className="text-gray-700">Status</TableHead>
+              <TableHead className="text-gray-700">Title</TableHead>
+              <TableHead className="text-right text-gray-700">Action</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {data?.courses?.map((course, idx) => (
+              <TableRow
+                key={course._id}
+                className={`${
+                  idx % 2 === 0 ? "bg-white" : "bg-gray-50"
+                } hover:bg-gray-100 transition`}
+              >
+                <TableCell className="font-semibold text-gray-800">
+                  ₹ {course?.coursePrice || "NA"}
+                </TableCell>
+                <TableCell>
+                  <Badge
+                    variant="secondary"
+                    className={`${
+                      course.isPublished
+                        ? "bg-green-100 text-green-700"
+                        : "bg-yellow-100 text-yellow-700"
+                    } rounded-md px-3 py-1 text-sm font-medium`}
+                  >
+                    {course.isPublished ? "Published" : "Draft"}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-gray-800">{course.courseTitle}</TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => navigate(`/admin/course/${course._id}`)}
+                    className="rounded-lg hover:bg-indigo-50 text-indigo-600 border-indigo-300"
+                  >
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 };
 
 export default CourseTable;
+
