@@ -8,14 +8,19 @@ import courseRoute from "./routes/course.route.js"
 import mediaRoute from "./routes/media.route.js"
 import purchaseRoute from "./routes/purchaseCourse.route.js"
 import courseProgressRoute from "./routes/courseProgress.route.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config({});
 connectDB();
 console.log("PORT VALUE:", process.env.PORT); 
-
 const app = express();
-
 const PORT = process.env.PORT || 3000;
+
+//const _dirname = path.resolve()
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 app.use(express.json());
 app.use(cookieParser());
@@ -32,6 +37,17 @@ app.use("/api/v1/purchase",purchaseRoute);
 app.use("/api/v1/progress",courseProgressRoute);
 
 
+// app.use(express.static(path.join(_dirname, "/client/dist")));
+// app.get('*',(_,res) => {
+//     res.sendFile(path.resolve(_dirname, "client", "dist", "index.html"));
+// });
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/client/dist")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"));
+  });
+}
 
 
 app.listen(PORT, () => {
