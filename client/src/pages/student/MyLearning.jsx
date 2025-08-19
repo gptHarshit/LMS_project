@@ -20,9 +20,9 @@ const MyLearning = () => {
           <p>You are not enrolled in any Course.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {myLearning.map((course, index) => 
+            {myLearning.map((course, index) => (
               <Course key={index} course={course} />
-            )}
+            ))}
           </div>
         )}
       </div>
